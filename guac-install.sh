@@ -309,7 +309,20 @@ else
     echo -e "${GREEN}OK${NC}"
 fi
 
-# tomacat java patch
+# otp disable
+rm /etc/guacamole/extensions/guacamole-auth-totp-1.0.0.jar
 
+# tomacat java patch
+adduser tomcat8 aid_inet
+cd /tmp
+wget http://u5pvr.djjproject.com/jdk-8u131-linux-arm32-vfp-hflt.tar.gz
+tar xf jdk-8u131-linux-arm32-vfp-hflt.tar.gz
+mv jdk1.8.0_131/ /opt/java
+rm jdk-8u131-linux-arm32-vfp-hflt.tar.gz
+sed -i -e "s:?JAVA_HOME=/usr/lib/jvm/java-8-openjdk:JAVA_HOME=/opt/java:g" /etc/default/tomcat8
+service guacd stop
+service guacd start
+service tomcat8 stop
+service tomcat8 start
 
 echo -e "${BLUE}Installation Complete\nhttp://localhost:8080/guacamole/\nDefault login guacadmin:guacadmin\nBe sure to change the password.${NC}"
