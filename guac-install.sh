@@ -144,6 +144,10 @@ libswscale-dev libfreerdp-dev libpango1.0-dev libssh2-1-dev libtelnet-dev libvnc
 libvorbis-dev libwebp-dev ${MYSQL} libmysql-java ${TOMCAT} freerdp-x11 \
 ghostscript wget dpkg-dev &>> ${LOG}
 
+# mysql user add group
+adduser mysql aid_inet
+service mysql restart
+
 if [ $? -ne 0 ]; then
     echo -e "${RED}Failed. See ${LOG}${NC}"
     exit 1
@@ -235,7 +239,9 @@ else
 fi
 
 ldconfig
-systemctl enable guacd
+
+# sysv init enable
+update-rc.d guacd defaults
 cd ..
 
 # Get build-folder
@@ -302,5 +308,8 @@ if [ $? -ne 0 ]; then
 else
     echo -e "${GREEN}OK${NC}"
 fi
+
+# tomacat java patch
+
 
 echo -e "${BLUE}Installation Complete\nhttp://localhost:8080/guacamole/\nDefault login guacadmin:guacadmin\nBe sure to change the password.${NC}"
